@@ -2,10 +2,11 @@
 using CommunityToolkit.Mvvm.Input;
 using HermesAI.MVVM.Model;
 using HermesAI.MVVM.Services;
+using HermesAI.MVVM.View;
 using System.Collections;
 using System.Windows;
 
-namespace HermesAI
+namespace HermesAI.MVVM.ViewModel
 {
     public partial class MainViewModel : ObservableObject
     {
@@ -20,6 +21,8 @@ namespace HermesAI
 
         private IChatRepository _chatRepository = new ChatRepository();
 
+        private readonly IAIConnection _aiConnection = new GeminiConnection();
+
         public MainViewModel()
         {
             ChatList = _chatRepository.GetChats();
@@ -31,15 +34,21 @@ namespace HermesAI
         }
 
         [RelayCommand]
-        private void SendMessage()
+        private async Task SendMessageAsync()
         {
             if (string.IsNullOrWhiteSpace(InputText)) return;
-                    
+                   
             CurrentChat.Messages.Add(new ChatMessage(InputText, true));
-
             InputText = string.Empty;
+            var loadingMessage = new ChatMessage("...", false);
+            CurrentChat.Messages.Add(loadingMessage);
 
-            CurrentChat.Messages.Add(new ChatMessage("Verstanden. Ich kontaktiere den MCP-Server...", false));
+            var historyForApi = CurrentChat.Messages.Where(m => m != loadingMessage).ToList();
+
+            string aiResponse = await _aiConnection.GetResponseAsync(historyForApi);
+
+            CurrentChat.Messages.Remove(loadingMessage);
+            CurrentChat.Messages.Add(new ChatMessage(aiResponse, false));
         }
 
         [RelayCommand]
@@ -64,6 +73,14 @@ namespace HermesAI
             {
                 window?.DragMove();
             }
+        }
+
+        [RelayCommand]
+        private void OpenSettings()
+        {
+            var settingsWin = new SettingsWindow();
+            settingsWin.Owner = Application.Current.MainWindow;
+            settingsWin.ShowDialog();
         }
     }
 }

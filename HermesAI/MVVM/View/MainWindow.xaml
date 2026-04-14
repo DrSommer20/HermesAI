@@ -1,4 +1,4 @@
-﻿<Window x:Class="HermesAI.MainWindow"
+﻿<Window x:Class="HermesAI.MVVM.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
@@ -11,10 +11,6 @@
         ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen">
     
-    <Window.DataContext>
-        <local:MainViewModel/>
-    </Window.DataContext>
-
   <Border CornerRadius="10" Background="#343541" ClipToBounds="True">
         <Grid>
             <Grid.RowDefinitions>
@@ -82,7 +78,11 @@
                     </ScrollViewer>
 
                     <Border Grid.Row="2" BorderBrush="#4D4D4F" BorderThickness="0,1,0,0" Padding="15">
-                        <TextBlock Text="⚙ Einstellungen" Foreground="#D1D5DB" Cursor="Hand"/>
+                        <TextBlock Text="⚙ Einstellungen" Foreground="#D1D5DB" Cursor="Hand">
+                            <TextBlock.InputBindings>
+                            <MouseBinding MouseAction="LeftClick" Command="{Binding OpenSettingsCommand}"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
                     </Border>
                 </Grid>
 
