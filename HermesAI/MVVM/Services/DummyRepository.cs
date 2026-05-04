@@ -6,9 +6,14 @@ using System.Text;
 
 namespace HermesAI.MVVM.Services
 {
-    class ChatRepository : IChatRepository
+    class DummyRepository : IChatRepository
     {
-        public ChatRepository() { }
+        public DummyRepository() { }
+
+        public void DeleteChat(Chat chat)
+        {
+            
+        }
 
         public IEnumerable<Chat> GetChats()
         {
@@ -33,6 +38,11 @@ namespace HermesAI.MVVM.Services
             dummyChats.Add(chat3);
 
             return dummyChats;
+        }
+
+        public void SaveChat(Chat chat)
+        {
+            
         }
     }
 }

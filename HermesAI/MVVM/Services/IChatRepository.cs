@@ -9,5 +9,7 @@ namespace HermesAI.MVVM.Services
     interface IChatRepository
     {
         IEnumerable<Chat> GetChats();
+        void SaveChat(Chat chat);
+        void DeleteChat(Chat chat);
     }
 }

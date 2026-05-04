@@ -1,19 +1,39 @@
-﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace HermesAI.MVVM.Model
 {
-    public class ChatMessage
+    public partial class ChatMessage : ObservableObject
     {
-        public string Text { get; set; }
-        public bool IsMyMessage { get; set; }
-        public DateTime Timestamp { get; set; }
-     
+        [ObservableProperty]
+        private string _text;
+        [ObservableProperty]
+        private bool _isMyMessage;
+        [ObservableProperty]
+        private DateTime _timestamp;
+        [ObservableProperty]
+        private bool _isToolMessage;
+        [ObservableProperty]
+        private string? _toolName;
+
         public ChatMessage(string text, bool isMyMessage) {
             this.Text = text;
             this.IsMyMessage = isMyMessage; 
-            Timestamp = DateTime.Now;
+            _timestamp = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Creates a special ChatMessage that represents a message from a tool 
+        /// </summary>
+        public static ChatMessage CreateToolMessage(string toolName, string text)
+        {
+            return new ChatMessage(text, false)
+            {
+                IsToolMessage = true,
+                ToolName = toolName
+            };
         }
     }
 }

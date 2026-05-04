@@ -7,7 +7,7 @@ namespace HermesAI.MVVM.Services
 {
     public static class SecretManager
     {
-        // Speicherort: C:\Users\[Name]\AppData\Roaming\HermesAI\secrets.dat
+        // File Path: C:\Users\[Name]\AppData\Roaming\HermesAI\secrets.dat
         private static readonly string SecretFilePath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "HermesAI",
@@ -19,7 +19,7 @@ namespace HermesAI.MVVM.Services
 
             byte[] clearBytes = Encoding.UTF8.GetBytes(apiKey);
 
-            //Nativ über Windows auf Basis des angemeldeten Users verschlüsseln (DataProtectionScope.CurrentUser)
+            // Native encryption using Windows DPAPI, tied to the current user
             byte[] encryptedBytes = ProtectedData.Protect(clearBytes, null, DataProtectionScope.CurrentUser);
             File.WriteAllText(SecretFilePath, Convert.ToBase64String(encryptedBytes));
         }
